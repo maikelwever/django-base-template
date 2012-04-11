@@ -9,22 +9,6 @@ import os
 # Your project root
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__) + "../../../")
 
-# Bundles is a dictionary of two dictionaries, css and js, which list css files
-# and js files that can be bundled together by the minify app.
-MINIFY_BUNDLES = {
-    'css': {
-        'base_css': (
-            'css/style.css',
-        ),
-    },
-    'js': {
-        'libs_js': (
-            'js/libs/jquery-1.6.2.min.js',
-            'js/libs/modernizr-2.0.6.min.js',
-        ),
-    }
-}
-
 SUPPORTED_NONLOCALES = ['media', 'admin', 'static']
 
 # Language code for this installation. All choices can be found here:
@@ -37,9 +21,6 @@ SITE_ID = 1
 ROOT_URLCONF = '{{ project_name }}.urls'
 
 INSTALLED_APPS = [
-    # Template apps
-    'jingo_minify',
-
     # Django contrib apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,7 +122,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'session_csrf.CsrfMiddleware',  # Must be after auth middleware.
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'commonware.middleware.FrameOptionsHeader',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -154,9 +135,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'django.core.context_processors.request',
     'django.core.context_processors.i18n',
     'django.core.context_processors.static',
-    'session_csrf.context_processor',
     'django.contrib.messages.context_processors.messages',
-    #'jingo_minify.helpers.build_ids',
 ]
 
 TEMPLATE_DIRS = (
@@ -169,7 +148,6 @@ TEMPLATE_DIRS = (
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'jingo.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
@@ -211,15 +189,6 @@ DEBUG_TOOLBAR_PANELS = (
 #AUTH_PROFILE_MODULE = '{{ project_name }}.accounts.UserProfile'
 
 FILE_UPLOAD_PERMISSIONS = 0664
-
-# Because Jinja2 is the default template loader, add any non-Jinja templated
-# apps here:
-JINGO_EXCLUDE_APPS = [
-    'admin',
-    'debug_toolbar',
-    'debug_toolbar_user_panel',
-    'memcache_toolbar',
-]
 
 # The WSGI Application to use for runserver
 WSGI_APPLICATION = '{{ project_name }}.wsgi.application'

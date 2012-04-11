@@ -5,13 +5,10 @@
 Django>=1.4
 
 # Templates
-jingo
-jingo-minify
 Markdown
 
 # Security
 bleach
-django-session-csrf
 #cef
 
 # Logging
